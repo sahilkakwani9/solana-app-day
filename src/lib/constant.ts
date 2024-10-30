@@ -1,8 +1,8 @@
 export const EclipseRPC = "https://staging-rpc.dev2.eclipsenetwork.xyz";
 
-export const PROGRAM_ID = "3MDkCnEnfCYmHNVSs5xuCDdSoGrrRAGbAZ88YtFC1SRy";
+export const PROGRAM_ID = "AS6Y2tgLoPWRJwgEQJ327FiG7J4UKfWezbkytboXVCGK";
 
-export const CONTEST_ADDRESS = "98ULfzYKzVFSMLJ3yLCcgGhFJ7tGKE4QvGNxykkPcfYr";
+export const CONTEST_ADDRESS = "GBGg9mVgtaYzf6423HXafqyxx3wTNSunDbeYPQHNGRvc";
 
 export const PRODUCT_CATEGORIES = [
   "All",

@@ -51,3 +51,10 @@ interface Backpack {
   disconnect(): Promise<void>;
   on: BackpackEvents["on"];
 }
+
+declare interface EthereumPrice {
+  ethereum: {
+    usd: number;
+  };
+ }
+ 

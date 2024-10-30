@@ -10,6 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        eclipseGreen: "#98FB98",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

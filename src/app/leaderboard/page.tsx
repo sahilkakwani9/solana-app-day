@@ -111,7 +111,7 @@ export default function LeaderboardPage() {
           </TableHeader>
           <TableBody>
             <AnimatePresence>
-              {filteredTeams.map((team) => (
+              {filteredTeams.map((team, index) => (
                 <motion.tr
                   key={team.contestantId}
                   layout
@@ -125,7 +125,7 @@ export default function LeaderboardPage() {
                   className="border-b border-[#98FB98] border-[0.1px]"
                 >
                   <TableCell className="font-medium text-center text-sm sm:text-lg font-barlow px-2 sm:px-4">
-                    {team.rank}
+                    {team.rank ? team.rank : index + 1}
                   </TableCell>
                   <TableCell className="text-center text-sm sm:text-lg font-barlow px-2 sm:px-4">
                     {team.contestantData.teamName}

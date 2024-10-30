@@ -1,6 +1,6 @@
 export type JOKERACEIDL = {
   version: "0.1.0";
-  address: "3MDkCnEnfCYmHNVSs5xuCDdSoGrrRAGbAZ88YtFC1SRy";
+  address: "AS6Y2tgLoPWRJwgEQJ327FiG7J4UKfWezbkytboXVCGK",
   name: "joke_race_eclipse";
   metadata: {
     name: "joke_race_eclipse";
@@ -319,7 +319,7 @@ export type JOKERACEIDL = {
 };
 export const IDL: JOKERACEIDL = {
   version: "0.1.0",
-  address: "3MDkCnEnfCYmHNVSs5xuCDdSoGrrRAGbAZ88YtFC1SRy",
+  address: "AS6Y2tgLoPWRJwgEQJ327FiG7J4UKfWezbkytboXVCGK",
   name: "joke_race_eclipse",
   instructions: [
     {

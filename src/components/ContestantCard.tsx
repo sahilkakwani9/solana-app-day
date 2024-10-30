@@ -3,10 +3,10 @@ import { useWallet } from "@/hooks/useWalletProvider";
 import { CONTEST_ADDRESS } from "@/lib/constant";
 import { BN } from "@project-serum/anchor";
 import { LAMPORTS_PER_SOL, PublicKey, SystemProgram } from "@solana/web3.js";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +20,7 @@ import { motion } from "framer-motion";
 import { Badge } from "./ui/badge";
 import { truncateDescription } from "@/lib/utils";
 import { queryClient } from "./providers";
+import { useEthereumPrice } from "@/hooks/useEthPrice";
 
 const MotionCard = motion(Card);
 
@@ -28,6 +29,9 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
   const { program } = useAnchor();
   const { connection } = useConnection();
   const { toast } = useToast();
+  const { data: ethPrice } = useEthereumPrice();
+  const [isLoading, setIsLoading] = useState(false);
+
   function getVaultAddress() {
     if (!program) return new PublicKey("");
     const pdaAddress = PublicKey.findProgramAddressSync(
@@ -38,6 +42,7 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
   }
 
   const handleVote = async () => {
+    setIsLoading(true);
     try {
       if (!publicKey) {
         await connect();
@@ -47,7 +52,9 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
       const contestAccount = await program.account.contest.fetch(
         CONTEST_ADDRESS
       );
+
       const contestantId = new BN(contestant.onChainId);
+
       const voterRecordPDA = PublicKey.findProgramAddressSync(
         [
           Buffer.from("vote_account"),
@@ -57,8 +64,11 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
         ],
         program.programId
       )[0];
+
+      const dollarsInEth = 0.2 / (ethPrice?.ethereum.usd || 2500);
+
       const voteTransaction = await program.methods
-        .vote(new BN(0.1 * LAMPORTS_PER_SOL), contestantId)
+        .vote(new BN(dollarsInEth * LAMPORTS_PER_SOL), contestantId)
         .accounts({
           contest: CONTEST_ADDRESS,
           voter: publicKey!,
@@ -67,12 +77,14 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
           systemProgram: SystemProgram.programId,
         })
         .transaction();
+
       voteTransaction.feePayer = publicKey;
       voteTransaction.recentBlockhash = (
         await connection.getLatestBlockhash()
       ).blockhash;
 
       const hash = await sendTransaction(voteTransaction);
+
       toast({
         title: "Vote transaction sent",
         action: (
@@ -81,7 +93,7 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
             className="text-[#98FB98] hover:text-[#98FB98]/80 h-auto p-0"
             onClick={() =>
               window.open(
-                `https://eclipsescan.xyz/tx/${hash.signature}`,
+                `https://eclipsescan.xyz/tx/${hash.signature}?cluster=devnet`,
                 "_blank",
                 "noopener,noreferrer"
               )
@@ -99,6 +111,8 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
       });
     } catch (error) {
       console.log("error voting on contestant", error);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -179,7 +193,7 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
           onClick={handleVote}
           className="bg-[#98FB98] text-black font-inter font-semibold px-6 text-md w-full hover:bg-white"
         >
-          Vote
+          {isLoading ? <Loader2 className="animate-spin" /> : "Vote"}
         </Button>
       </CardFooter>
     </MotionCard>

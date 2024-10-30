@@ -17,6 +17,7 @@ import {
 import { useToast } from "./use-toast";
 import { Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { EclipseRPC } from "@/lib/constant";
 
 // Define the context type
 interface WalletContextType {
@@ -53,7 +54,7 @@ export default function AppWalletProvider({
 }) {
   const [isConnected, setIsConnected] = useState(false);
   const [publicKey, setPublicKey] = useState<PublicKey | null>(null);
-  const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
+  const endpoint = EclipseRPC;
   const { toast } = useToast();
 
   const connect = async () => {
