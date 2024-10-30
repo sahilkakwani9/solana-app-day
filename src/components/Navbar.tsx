@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDown, Copy, LogOut, Menu, X } from "lucide-react";
+import { ChevronDown, Copy, LogOut, Menu, Wallet, X } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
@@ -62,12 +62,10 @@ function Navbar() {
         </DropdownMenu>
       ) : (
         <div
-          className="bg-[#98FB98] text-black block px-3 py-2 rounded-3xl text-base font-medium hover:bg-white cursor-pointer font-barlow"
+          className="bg-[#98FB98] text-black px-3 py-2 rounded-3xl text-base font-medium hover:bg-white cursor-pointer font-barlow flex flex-row gap-x-1 items-center justify-center"
           onClick={connect}
-          // onClick={() => {
-          //   select("backpack" as);
-          // }}
         >
+          <Wallet size={20} />
           Connect Wallet
         </div>
       )}
