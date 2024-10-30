@@ -1,0 +1,71 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+model Contestant {
+  id             String   @id @default(cuid())
+  name           String
+  teamName       String
+  productName    String
+  description    String   @db.Text 
+  category       String[]
+  votes          Int      @default(0)
+  
+  // Media fields
+  logo           String
+  headshot       String
+  
+  // Onchain fields
+  eclipseAddress String
+  onChainId      Int     @unique
+  
+  // Timestamps
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  // Relations
+  contests       ContestParticipant[]
+
+  @@index([teamName])
+  @@index([productName])
+  @@index([votes])
+  @@index([onChainId])
+}
+
+model Contest {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String   @db.Text
+  startDate   DateTime @default(now())
+  endDate     DateTime?
+  isActive    Boolean  @default(true)
+  
+  // Relations
+  participants ContestParticipant[]
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([startDate, endDate])
+}
+
+model ContestParticipant {
+  id           String     @id @default(cuid())
+  contestId    String
+  contestantId String
+  joinedAt     DateTime   @default(now())
+  
+  // Relations
+  contest      Contest    @relation(fields: [contestId], references: [id])
+  contestant   Contestant @relation(fields: [contestantId], references: [id])
+
+  @@unique([contestId, contestantId])
+  @@index([contestId])
+  @@index([contestantId])
+}
