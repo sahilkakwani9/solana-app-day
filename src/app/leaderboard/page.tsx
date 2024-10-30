@@ -19,6 +19,7 @@ import { AlertCircle, Search, Trophy } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent } from "@/components/ui/card";
 import ErrorState from "@/components/ErrorState";
+import { useRouter } from "next/navigation";
 
 export default function LeaderboardPage() {
   const [filter, setFilter] = useState("All");
@@ -26,6 +27,7 @@ export default function LeaderboardPage() {
   const { data, isLoading, error, refetch } = useLeaderboard();
 
   const [previousEntries, setPreviousEntries] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     if (data?.entries) {
@@ -34,7 +36,7 @@ export default function LeaderboardPage() {
   }, [data]);
 
   const handleRetry = () => {
-    refetch();
+    router.refresh();
   };
   if (isLoading) return <LeaderboardSkeleton />;
 

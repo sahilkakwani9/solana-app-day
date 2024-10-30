@@ -75,7 +75,7 @@ function Navbar() {
   ));
   return (
     <div className="flex justify-between items-center px-12 py-4 relative bg-black">
-      <Link href={"/contest"}>
+      <Link href={"/"}>
         <img src="./eclipse-logo.png" className="w-10 h-10" />
       </Link>
       <h1 className="text-4xl font-barlowItalic font-bold absolute left-1/2 transform -translate-x-1/2 hidden lg:block">
