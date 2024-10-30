@@ -15,11 +15,15 @@ import { motion } from "framer-motion";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { LeaderboardSkeleton } from "@/components/leaderboardSkeleton";
 import Categories from "@/components/Categories";
+import { AlertCircle, Search, Trophy } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Card, CardContent } from "@/components/ui/card";
+import ErrorState from "@/components/ErrorState";
 
 export default function LeaderboardPage() {
   const [filter, setFilter] = useState("All");
 
-  const { data, isLoading, error } = useLeaderboard();
+  const { data, isLoading, error, refetch } = useLeaderboard();
 
   const [previousEntries, setPreviousEntries] = useState([]);
 
@@ -29,14 +33,57 @@ export default function LeaderboardPage() {
     }
   }, [data]);
 
+  const handleRetry = () => {
+    refetch();
+  };
+  if (isLoading) return <LeaderboardSkeleton />;
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-black text-white p-4 sm:p-8 max-w-7xl mx-auto font-sans">
+        <ErrorState
+          title="Failed to Load Leaderboard"
+          description="We encountered an error while fetching the leaderboard data. Please try again."
+          icon={AlertCircle}
+          action={{ label: "Retry Loading", onClick: handleRetry }}
+        />
+      </div>
+    );
+  }
+
+  if (!data?.entries || data.entries.length === 0) {
+    return (
+      <ErrorState
+        title="No Leaderboard Data"
+        description="The competition hasn't started yet or no votes have been recorded."
+        icon={Trophy}
+        variant="warning"
+        action={{ label: "Check Again", onClick: handleRetry }}
+      />
+    );
+  }
+
   const filteredTeams =
     filter === "All"
       ? data?.entries
       : data?.entries.filter((team) =>
-          team.contestantData.category.includes(filter as Category)
+          team.contestantData.category.includes(filter)
         );
 
-  if (isLoading || error || !filteredTeams) return <LeaderboardSkeleton />;
+  if (!filteredTeams || filteredTeams.length === 0) {
+    return (
+      <div className="min-h-screen bg-black text-white p-4 sm:p-8 max-w-7xl mx-auto font-sans">
+        <Categories filter={filter} setFilter={setFilter} />
+        <ErrorState
+          title="No Results Found"
+          description={`No teams found in the "${filter}" category. Try selecting a different category.`}
+          icon={Search}
+          variant="warning"
+          action={{ label: "Show All Teams", onClick: () => setFilter("All") }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-white p-4 sm:p-8 max-w-7xl mx-auto font-sans">
