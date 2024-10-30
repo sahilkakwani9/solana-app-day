@@ -9,6 +9,7 @@ import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import SearchBar from "@/components/SearchBar";
 import Categories from "@/components/Categories";
 import ContestantCard from "@/components/ContestantCard";
+import TotalVotes from "@/components/TotalVotes";
 
 export default function Component() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,7 +54,11 @@ export default function Component() {
         setIsSearchFocused={setIsSearchFocused}
         setSearchTerm={setSearchTerm}
       />
+      <div className="flex flex-col md:flex-row md:justify-between">
+
       <Categories filter={filter} setFilter={setFilter} />
+      <TotalVotes />
+      </div>
       <AnimatePresence>
         {isLoading ? (
           <motion.div

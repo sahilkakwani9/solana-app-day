@@ -7,7 +7,7 @@ import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { AnchorProvider } from "@/hooks/useAnchor";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (
