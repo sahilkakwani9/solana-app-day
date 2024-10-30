@@ -19,6 +19,7 @@ import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { Badge } from "./ui/badge";
 import { truncateDescription } from "@/lib/utils";
+import { queryClient } from "./providers";
 
 const MotionCard = motion(Card);
 
@@ -92,6 +93,9 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
             </span>
           </Button>
         ),
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["AllVotes"],
       });
     } catch (error) {
       console.log("error voting on contestant", error);
