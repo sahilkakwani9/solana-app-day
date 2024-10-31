@@ -4,6 +4,6 @@ export const PROGRAM_ID = "AS6Y2tgLoPWRJwgEQJ327FiG7J4UKfWezbkytboXVCGK";
 
 export const CONTEST_ADDRESS = "GBGg9mVgtaYzf6423HXafqyxx3wTNSunDbeYPQHNGRvc";
 
-export const PRODUCT_CATEGORIES = ["All", "Depin", "Infra", "Social"];
+export const PRODUCT_CATEGORIES = ["All", "DePin", "Infra", "Social", "DeFi"];
 
 export const CONTEST_ID = "cm2uefb600000oxsrbpze79t2";
