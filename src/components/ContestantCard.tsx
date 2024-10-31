@@ -85,32 +85,38 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
 
       const hash = await sendTransaction(voteTransaction);
 
-      toast({
-        title: "Vote transaction sent",
-        action: (
-          <Button
-            variant="link"
-            className="text-[#98FB98] hover:text-[#98FB98]/80 h-auto p-0"
-            onClick={() =>
-              window.open(
-                `https://eclipsescan.xyz/tx/${hash.signature}?cluster=devnet`,
-                "_blank",
-                "noopener,noreferrer"
-              )
-            }
-          >
-            <span className="flex items-center gap-1">
-              View transaction
-              <ExternalLink className="h-4 w-4" />
-            </span>
-          </Button>
-        ),
-      });
+      if (hash && hash.signature) {
+        toast({
+          title: "Vote transaction sent",
+          action: (
+            <Button
+              variant="link"
+              className="text-[#98FB98] hover:text-[#98FB98]/80 h-auto p-0"
+              onClick={() =>
+                window.open(
+                  `https://eclipsescan.xyz/tx/${hash.signature}?cluster=devnet`,
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
+            >
+              <span className="flex items-center gap-1">
+                View transaction
+                <ExternalLink className="h-4 w-4" />
+              </span>
+            </Button>
+          ),
+        });
+      }
       await queryClient.invalidateQueries({
         queryKey: ["AllVotes"],
       });
     } catch (error) {
       console.log("error voting on contestant", error);
+      toast({
+        title: "Transaction Failed",
+        description: (error as Error).message,
+      });
     } finally {
       setIsLoading(false);
     }

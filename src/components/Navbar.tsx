@@ -2,7 +2,7 @@
 import { ChevronDown, Copy, LogOut, Menu, Wallet, X } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 
 import { shortenAddress } from "@/lib/utils";
 import { Button } from "./ui/button";
@@ -33,8 +33,8 @@ function Navbar() {
       className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4"
       {...props}
     >
-      <Link href="/leaderboard">
-        <div className="bg-white text-black block px-3 py-2 rounded-3xl text-base font-medium hover:bg-[#98FB98] font-barlow">
+      <Link href="/leaderboard" onClick={toggleMenu}>
+        <div className="bg-white text-black block px-3 py-2 rounded-3xl text-base font-medium hover:bg-[#98FB98] font-barlow text-center">
           Leaderboard
         </div>
       </Link>
@@ -63,7 +63,10 @@ function Navbar() {
       ) : (
         <div
           className="bg-[#98FB98] text-black px-3 py-2 rounded-3xl text-base font-medium hover:bg-white cursor-pointer font-barlow flex flex-row gap-x-1 items-center justify-center"
-          onClick={connect}
+          onClick={async () => {
+            await connect();
+            toggleMenu();
+          }}
         >
           <Wallet size={20} />
           Connect Wallet
@@ -72,7 +75,7 @@ function Navbar() {
     </div>
   ));
   return (
-    <div className="flex justify-between items-center px-12 py-4 relative bg-black">
+    <div className="flex justify-between items-center px-8 md:px-12 py-4 relative bg-black">
       <Link href={"/"}>
         <img src="./eclipse-logo.png" className="w-10 h-10" />
       </Link>

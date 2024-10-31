@@ -121,7 +121,10 @@ export default function AppWalletProvider({
     try {
       return await window?.backpack?.sendAndConfirm(txn);
     } catch (error) {
-      console.log("error sendingtransaction", error);
+      console.log("we have error here", error);
+
+      console.log("we have error here too", error);
+      throw Error((error as Error).message);
     }
   };
 
