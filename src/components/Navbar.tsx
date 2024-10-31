@@ -30,11 +30,16 @@ function Navbar() {
   >((props, ref) => (
     <div
       ref={ref}
-      className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4"
+      className="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-4"
       {...props}
     >
       <Link href="/leaderboard" onClick={toggleMenu}>
-        <div className="bg-white text-black block px-3 py-2 rounded-3xl text-base font-medium hover:bg-[#98FB98] font-barlow text-center">
+        <div className="bg-white text-black block md:hidden px-3 py-2 rounded-3xl text-base font-medium hover:bg-[#98FB98] font-barlow text-center">
+          Leaderboard
+        </div>
+      </Link>
+      <Link href="/leaderboard">
+        <div className="bg-white hidden text-black md:block px-3 py-2 rounded-3xl text-base font-medium hover:bg-[#98FB98] font-barlow text-center">
           Leaderboard
         </div>
       </Link>
@@ -61,16 +66,27 @@ function Navbar() {
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <div
-          className="bg-[#98FB98] text-black px-3 py-2 rounded-3xl text-base font-medium hover:bg-white cursor-pointer font-barlow flex flex-row gap-x-1 items-center justify-center"
-          onClick={async () => {
-            await connect();
-            toggleMenu();
-          }}
-        >
-          <Wallet size={20} />
-          Connect Wallet
-        </div>
+        <>
+          <div
+            className="bg-[#98FB98] text-black md:hidden px-3 py-2 rounded-3xl text-base font-medium hover:bg-white cursor-pointer font-barlow flex flex-row gap-x-1 items-center justify-center"
+            onClick={async () => {
+              await connect();
+              toggleMenu();
+            }}
+          >
+            <Wallet size={20} />
+            Connect Wallet
+          </div>
+          <div
+            className="bg-[#98FB98] hidden md:flex text-black px-3 py-2 rounded-3xl text-base font-medium hover:bg-white cursor-pointer font-barlow flex-row gap-x-1 items-center justify-center"
+            onClick={async () => {
+              await connect();
+            }}
+          >
+            <Wallet size={20} />
+            Connect Wallet
+          </div>
+        </>
       )}
     </div>
   ));
