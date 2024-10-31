@@ -10,6 +10,7 @@ import SearchBar from "@/components/SearchBar";
 import Categories from "@/components/Categories";
 import ContestantCard from "@/components/ContestantCard";
 import TotalVotes from "@/components/TotalVotes";
+import Image from "next/image";
 
 export default function Component() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -55,9 +56,8 @@ export default function Component() {
         setSearchTerm={setSearchTerm}
       />
       <div className="flex flex-col md:flex-row md:justify-between">
-
-      <Categories filter={filter} setFilter={setFilter} />
-      <TotalVotes />
+        <Categories filter={filter} setFilter={setFilter} />
+        <TotalVotes />
       </div>
       <AnimatePresence>
         {isLoading ? (
@@ -80,6 +80,13 @@ export default function Component() {
             exit={{ opacity: 0 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 gap-x-12 "
           >
+            {/* <Image
+              src="/fleek-logo.png"
+              alt="Fleek"
+              width={40}
+              height={50}
+              className="object-contain absolute left-10"
+            /> */}
             {filteredTeams.map((contestant) => (
               <ContestantCard contestant={contestant} />
             ))}
