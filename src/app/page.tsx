@@ -10,7 +10,6 @@ import SearchBar from "@/components/SearchBar";
 import Categories from "@/components/Categories";
 import ContestantCard from "@/components/ContestantCard";
 import TotalVotes from "@/components/TotalVotes";
-import Image from "next/image";
 
 export default function Component() {
   const [searchTerm, setSearchTerm] = useState("");

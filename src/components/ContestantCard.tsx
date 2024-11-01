@@ -21,6 +21,7 @@ import { Badge } from "./ui/badge";
 import { truncateDescription } from "@/lib/utils";
 import { queryClient } from "./providers";
 import { useEthereumPrice } from "@/hooks/useEthPrice";
+import GoogleDriveImage from "./GoogleDriveImage";
 
 const MotionCard = motion(Card);
 
@@ -150,10 +151,10 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
         </div>
       </CardHeader>
       <CardContent>
-        <img
-          src={`https://drive.google.com/thumbnail?export=view&id=${contestant.logo}&authuser=0`}
+        <GoogleDriveImage
+          fileId={contestant.logo}
           alt={`${contestant.teamName} logo`}
-          className="w-full h-56 object-fill mb-4 rounded-xl"
+          onError={(err) => console.error('Image failed to load:', err)}
         />
         <p className="text-sm min-h-16 w-full break-words">
           {truncateDescription(contestant.description, 100)}
