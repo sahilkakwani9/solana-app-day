@@ -156,7 +156,7 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
           alt={`${contestant.teamName} logo`}
           onError={(err) => console.error('Image failed to load:', err)}
         />
-        <p className="text-sm min-h-16 w-full break-words">
+        <p className="text-sm min-h-16 w-full break-words mt-4">
           {truncateDescription(contestant.description, 100)}
           <Dialog>
             <DialogTrigger asChild>
