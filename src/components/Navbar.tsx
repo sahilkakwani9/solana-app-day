@@ -136,11 +136,11 @@ function Navbar() {
       </div>
       <div className="px-8 md:px-12 py-2 flex justify-center items-center">
         <div className="flex items-center space-x-2">
-          <span className="text-eclipseGreen text-lg font-barlow">Powered by</span>
+          <span className="text-eclipseGreen text-lg font-barlow font-semibold">Powered by</span>
           <Image
-            src="/fleek-branding.png"
+            src="/fleek-logo.svg"
             alt="Fleek"
-            width={160}
+            width={80}
             height={50}
             className="object-contain"
           />
