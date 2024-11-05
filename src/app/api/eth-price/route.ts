@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 import { NextResponse } from "next/server";
 
 const COINGECKO_KEY = process.env.COINGECKO_KEY;
