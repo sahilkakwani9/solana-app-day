@@ -10,7 +10,7 @@ interface LeaderboardData {
 
 const fetchLeaderboard = async (): Promise<LeaderboardData> => {
   const response = await fetch(
-    "https://4efb-103-250-159-231.ngrok-free.app/leaderboard",
+    "https://1307-103-250-159-212.ngrok-free.app/leaderboard",
     {
       method: "GET",
       headers: {

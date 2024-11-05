@@ -1,13 +1,6 @@
 export type JOKERACEIDL = {
   version: "0.1.0";
-  address: "AS6Y2tgLoPWRJwgEQJ327FiG7J4UKfWezbkytboXVCGK",
   name: "joke_race_eclipse";
-  metadata: {
-    name: "joke_race_eclipse";
-    version: "0.1.0";
-    spec: "0.1.0";
-    description: "Created with Anchor";
-  };
   instructions: [
     {
       name: "initialize";
@@ -28,7 +21,12 @@ export type JOKERACEIDL = {
           isSigner: false;
         }
       ];
-      args: [];
+      args: [
+        {
+          name: "authority";
+          type: "publicKey";
+        }
+      ];
     },
     {
       name: "initContestCounter";
@@ -316,10 +314,12 @@ export type JOKERACEIDL = {
       name: "Unauthorized";
     }
   ];
+  metadata: {
+    address: "AjCadrNzohgyFNaDsFWgziJnhpAVq4bbQkrwFu6JfLdR";
+  };
 };
 export const IDL: JOKERACEIDL = {
   version: "0.1.0",
-  address: "AS6Y2tgLoPWRJwgEQJ327FiG7J4UKfWezbkytboXVCGK",
   name: "joke_race_eclipse",
   instructions: [
     {
@@ -341,7 +341,12 @@ export const IDL: JOKERACEIDL = {
           isSigner: false,
         },
       ],
-      args: [],
+      args: [
+        {
+          name: "authority",
+          type: "publicKey",
+        },
+      ],
     },
     {
       name: "initContestCounter",
@@ -630,9 +635,6 @@ export const IDL: JOKERACEIDL = {
     },
   ],
   metadata: {
-    name: "joke_race_eclipse",
-    version: "0.1.0",
-    spec: "0.1.0",
-    description: "Created with Anchor",
+    address: "AjCadrNzohgyFNaDsFWgziJnhpAVq4bbQkrwFu6JfLdR",
   },
 };
