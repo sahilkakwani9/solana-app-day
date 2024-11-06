@@ -79,13 +79,6 @@ export default function Component() {
             exit={{ opacity: 0 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 gap-x-12 "
           >
-            {/* <Image
-              src="/fleek-logo.png"
-              alt="Fleek"
-              width={40}
-              height={50}
-              className="object-contain absolute left-10"
-            /> */}
             {filteredTeams.map((contestant) => (
               <ContestantCard contestant={contestant} />
             ))}

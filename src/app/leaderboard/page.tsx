@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -16,8 +16,6 @@ import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { LeaderboardSkeleton } from "@/components/leaderboardSkeleton";
 import Categories from "@/components/Categories";
 import { AlertCircle, Search, Trophy } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Card, CardContent } from "@/components/ui/card";
 import ErrorState from "@/components/ErrorState";
 import { useRouter } from "next/navigation";
 
@@ -26,14 +24,14 @@ export default function LeaderboardPage() {
 
   const { data, isLoading, error, refetch } = useLeaderboard();
 
-  const [previousEntries, setPreviousEntries] = useState([]);
+  // const [previousEntries, setPreviousEntries] = useState([]);
   const router = useRouter();
 
-  useEffect(() => {
-    if (data?.entries) {
-      setPreviousEntries(data.entries);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data?.entries) {
+  //     setPreviousEntries(data.entries);
+  //   }
+  // }, [data]);
 
   const handleRetry = () => {
     router.refresh();
@@ -125,7 +123,7 @@ export default function LeaderboardPage() {
                   className="border-b border-[#98FB98] border-[0.1px]"
                 >
                   <TableCell className="font-medium text-center text-sm sm:text-lg font-barlow px-2 sm:px-4">
-                    {team.rank ? team.rank : index + 1}
+                    {team.rank ? team.rank : "-"}
                   </TableCell>
                   <TableCell className="text-center text-sm sm:text-lg font-barlow px-2 sm:px-4">
                     {team.contestantData.teamName}
