@@ -1,4 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import { PrismaNeon } from "@prisma/adapter-neon";
+import { Pool } from "@neondatabase/serverless";
+const neon = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaNeon(neon);
+
+const prisma = new PrismaClient({ adapter });
 
 export default prisma;

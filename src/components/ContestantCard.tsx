@@ -133,7 +133,7 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
     >
       <CardHeader>
         <div className="flex flex-col items-start">
-          <h3 className="text-2xl font-bold font-barlow mb-2">
+          <h3 className="text-2xl font-bold  text-white font-barlow mb-2">
             {contestant.teamName}
           </h3>
           <p className="text-[#98FB98] mb-2">{contestant.productName}</p>
@@ -156,7 +156,7 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
           alt={`${contestant.teamName} logo`}
           onError={(err) => console.error('Image failed to load:', err)}
         />
-        <p className="text-sm min-h-16 w-full break-words mt-4">
+        <p className="text-sm min-h-16 w-full break-words mt-4 text-white">
           {truncateDescription(contestant.description, 100)}
           <Dialog>
             <DialogTrigger asChild>
