@@ -1,6 +1,6 @@
 export const runtime = 'edge';
 import { NextResponse } from "next/server";
-import prisma from "../../../../prisma/client";
+import prisma from "../../../../drizzle/client";
 import { z } from "zod";
 import { CONTEST_ID } from "@/lib/constant";
 

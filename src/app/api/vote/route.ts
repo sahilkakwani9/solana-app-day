@@ -1,7 +1,7 @@
 export const runtime = 'edge';
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import prisma from "../../../../prisma/client";
+import prisma from "../../../../drizzle/client";
 import { CONTEST_ID } from "@/lib/constant";
 
 const voteSchema = z.object({

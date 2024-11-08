@@ -1,8 +1,10 @@
-export const runtime = 'edge';
 import { NextResponse } from "next/server";
-import prisma from "../../../../prisma/client";
-import { Prisma } from "@prisma/client";
+import { and, desc, ilike, or, sql, eq } from "drizzle-orm";
+import { db } from "../../../../drizzle/client";
+import { contestant, contestParticipant } from "../../../../drizzle/schema";
 import { CONTEST_ID } from "@/lib/constant";
+
+export const runtime = "edge";
 
 export async function GET(req: Request) {
   try {
@@ -11,39 +13,62 @@ export async function GET(req: Request) {
     const page = parseInt(searchParams.get("page") ?? "1");
     const search = searchParams.get("search");
 
-    const skip = (page - 1) * limit;
+    const offset = (page - 1) * limit;
 
-    const where: Prisma.ContestantWhereInput = {
-      contests: {
-        some: {
-          contestId: CONTEST_ID,
-        },
-      },
-      ...(search && {
-        OR: [
-          { name: { contains: search, mode: "insensitive" } },
-          { teamName: { contains: search, mode: "insensitive" } },
-          { productName: { contains: search, mode: "insensitive" } },
-        ],
-      }),
-    };
+    // Build the base query conditions
+    let conditions = [eq(contestParticipant.contestId, CONTEST_ID)];
 
-    const [contestants, total] = await Promise.all([
-      prisma.contestant.findMany({
-        where,
-        take: limit,
-        skip,
-        orderBy: { createdAt: "desc" },
-        include: {
-          contests: true,
-        },
-      }),
-      prisma.contestant.count({ where }),
+    // Add search conditions if search parameter exists
+    if (search) {
+      conditions.push(
+        or(
+          ilike(contestant.name, `%${search}%`),
+          ilike(contestant.teamName, `%${search}%`),
+          ilike(contestant.productName, `%${search}%`)
+        )
+      );
+    }
+
+    // Query for contestants with pagination
+    const contestantsQuery = db
+      .select({
+        contestant: contestant,
+        contestParticipant: contestParticipant,
+      })
+      .from(contestant)
+      .innerJoin(
+        contestParticipant,
+        eq(contestant.id, contestParticipant.contestantId)
+      )
+      .where(and(...conditions))
+      .orderBy(desc(contestant.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    // Count total records
+    const countQuery = db
+      .select({
+        count: sql<number>`cast(count(*) as integer)`,
+      })
+      .from(contestant)
+      .innerJoin(
+        contestParticipant,
+        eq(contestant.id, contestParticipant.contestantId)
+      )
+      .where(and(...conditions));
+
+    // Execute both queries in parallel
+    const [contestants, [{ count: total }]] = await Promise.all([
+      contestantsQuery,
+      countQuery,
     ]);
 
     return NextResponse.json({
       success: true,
-      data: contestants,
+      data: contestants.map(({ contestant, contestParticipant }) => ({
+        ...contestant,
+        contests: [contestParticipant],
+      })),
       pagination: {
         total,
         pages: Math.ceil(total / limit),
