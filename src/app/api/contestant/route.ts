@@ -23,11 +23,13 @@ export async function GET(req: Request) {
       conditions.push(
         or(
           ilike(contestant.name, `%${search}%`),
-          ilike(contestant.teamName, `%${search}%`),
-          ilike(contestant.productName, `%${search}%`)
+          ilike(contestant.productName, `%${search}%`) // Removed teamName as it's no longer in schema
         )
       );
     }
+
+    // Start transaction for consistent read
+    // await client.query("BEGIN");
 
     // Query for contestants with pagination
     const contestantsQuery = db
@@ -63,6 +65,9 @@ export async function GET(req: Request) {
       countQuery,
     ]);
 
+    // Commit transaction
+    // await client.query("COMMIT");
+
     return NextResponse.json({
       success: true,
       data: contestants.map(({ contestant, contestParticipant }) => ({
@@ -77,13 +82,20 @@ export async function GET(req: Request) {
       },
     });
   } catch (error) {
+    // Rollback transaction if there's an error
+    // await client.query("ROLLBACK");
     console.error("Error fetching contestants:", error);
     return NextResponse.json(
       {
         success: false,
         error: "Internal server error",
+        message:
+          error instanceof Error ? error.message : "Unknown error occurred",
       },
       { status: 500 }
     );
+  } finally {
+    // Always release the client back to the pool
+    // client.release();
   }
 }

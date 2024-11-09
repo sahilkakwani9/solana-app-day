@@ -15,14 +15,12 @@ export const contestant = pgTable(
   {
     id: text().primaryKey().notNull(),
     name: text().notNull(),
-    teamName: text().notNull(),
     productName: text().notNull(),
     description: text().notNull(),
     category: text().array().notNull(),
     votes: integer().default(0).notNull(),
     logo: text().notNull(),
-    headshot: text().notNull(),
-    eclipseAddress: text().notNull(),
+    projectLink: text().notNull(),
     onChainId: integer().notNull(),
     createdAt: timestamp({ mode: "string" }).defaultNow().notNull(),
     updatedAt: timestamp({ mode: "string" }).defaultNow().notNull(),
@@ -36,10 +34,6 @@ export const contestant = pgTable(
       productNameIdx: index("Contestant_productName_idx").using(
         "btree",
         table.productName.asc().nullsLast()
-      ),
-      teamNameIdx: index("Contestant_teamName_idx").using(
-        "btree",
-        table.teamName.asc().nullsLast()
       ),
       votesIdx: index("Contestant_votes_idx").using(
         "btree",

@@ -1,8 +1,11 @@
-export const runtime = 'edge';
 import { NextResponse } from "next/server";
-import prisma from "../../../../drizzle/client";
 import { z } from "zod";
+import { db } from "../../../../drizzle/client";
+import { contestant, contestParticipant } from "../../../../drizzle/schema";
 import { CONTEST_ID } from "@/lib/constant";
+import { desc } from "drizzle-orm";
+
+export const runtime = "edge";
 
 const createContestantSchema = z.object({
   timestamp: z.string().datetime(),
@@ -25,17 +28,23 @@ const createContestantSchema = z.object({
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-
     const validatedData = createContestantSchema.parse(body);
 
-    const lastContestant = await prisma.contestant.findFirst({
-      orderBy: { onChainId: "desc" },
-    });
+    // Get the last onChainId using Drizzle syntax
+    const [lastContestant] = await db
+      .select({ onChainId: contestant.onChainId })
+      .from(contestant)
+      .orderBy(desc(contestant.onChainId))
+      .limit(1);
+
     const nextOnChainId = (lastContestant?.onChainId ?? 0) + 1;
 
-    const result = await prisma.$transaction(async (tx) => {
-      const contestant = await tx.contestant.create({
-        data: {
+    // Using Drizzle's transaction
+    const result = await db.transaction(async (tx) => {
+      // Insert contestant
+      const [newContestant] = await tx
+        .insert(contestant)
+        .values({
           name: validatedData.name,
           teamName: validatedData.team_name,
           productName: validatedData.product_name,
@@ -45,18 +54,20 @@ export async function POST(req: Request) {
           headshot: validatedData.speacker_headshot[0],
           eclipseAddress: validatedData.eclipse_wallet_address,
           onChainId: nextOnChainId,
-        },
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .returning();
+
+      // Create contest participant relationship
+      await tx.insert(contestParticipant).values({
+        contestId: CONTEST_ID,
+        contestantId: newContestant.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
 
-      // Create the contest participant relationship
-      await tx.contestParticipant.create({
-        data: {
-          contestId: CONTEST_ID,
-          contestantId: contestant.id,
-        },
-      });
-
-      return contestant;
+      return newContestant;
     });
 
     return NextResponse.json(
@@ -80,17 +91,19 @@ export async function POST(req: Request) {
       );
     }
 
-    if (error instanceof Error) {
-      if (error.message.includes("Unique constraint")) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: "Duplicate entry",
-            message: "A contestant with this info already exists",
-          },
-          { status: 409 }
-        );
-      }
+    if (
+      error instanceof Error &&
+      (error.message.includes("unique constraint") ||
+        error.message.includes("duplicate key"))
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Duplicate entry",
+          message: "A contestant with this info already exists",
+        },
+        { status: 409 }
+      );
     }
 
     return NextResponse.json(
