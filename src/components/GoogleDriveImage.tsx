@@ -42,11 +42,20 @@ const GoogleDriveImage = ({
 
   if (error || !imageUrl) {
     return (
-      <div
-        className="w-full h-36 bg-[#1a1a1a] rounded-xl"
-        role="img"
-        aria-label={`Placeholder for ${alt}`}
-      />
+      <div className="relative w-full h-36">
+        <Image
+          src={`https://placehold.co/600x400/1a1a1a/FFF?text=${alt}`}
+          alt={alt}
+          fill
+          className={`${className} ${
+            loading ? "animate-pulse bg-gray-700" : ""
+          }`}
+          onError={() => setError(true)}
+          onLoad={() => setLoading(false)}
+          priority={priority}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+      </div>
     );
   }
 

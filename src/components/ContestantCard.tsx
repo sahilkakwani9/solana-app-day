@@ -174,7 +174,7 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
       <CardContent>
         <GoogleDriveImage
           fileId={contestant.logo}
-          alt={`${contestant.productName} logo`}
+          alt={`${contestant.productName}`}
           onError={(err: unknown) =>
             console.error("Image failed to load:", err)
           }
