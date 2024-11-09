@@ -6,7 +6,7 @@ import { LAMPORTS_PER_SOL, PublicKey, SystemProgram } from "@solana/web3.js";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
-import { ExternalLink, Loader2 } from "lucide-react";
+import { ExternalLink, Globe, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +22,7 @@ import { truncateDescription } from "@/lib/utils";
 import { queryClient } from "./providers";
 import { useEthereumPrice } from "@/hooks/useEthPrice";
 import GoogleDriveImage from "./GoogleDriveImage";
+import { LinkedInLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 
 const MotionCard = motion(Card);
 
@@ -32,6 +33,16 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
   const { toast } = useToast();
   const { data: ethPrice } = useEthereumPrice();
   const [isLoading, setIsLoading] = useState(false);
+
+  const getLinkIcon = (link: string) => {
+    if (/twitter\.com|x\.com/i.test(link)) {
+      return <TwitterLogoIcon className="h-6 w-6 text-[#98FB98]" />;
+    } else if (/linkedin\.com/i.test(link)) {
+      return <LinkedInLogoIcon className="h-6 w-6 text-[#98FB98]" />;
+    } else {
+      return <Globe className="h-6 w-6 text-[#98FB98]" />;
+    }
+  };
 
   function getVaultAddress() {
     if (!program) return new PublicKey("");
@@ -131,29 +142,39 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
         transition: { duration: 0.3 },
       }}
     >
-      <CardHeader>
-        <div className="flex flex-col items-start">
-          <h3 className="text-2xl font-bold font-barlow mb-2 text-white">
-            {contestant.teamName}
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
+          <h3 className="text-2xl font-bold font-barlow text-white">
+            {contestant.productName}
           </h3>
-          <p className="text-[#98FB98] mb-2">{contestant.productName}</p>
-          <div className="flex flex-wrap gap-2">
-            {contestant.category.map((category, catIndex) => (
-              <Badge
-                key={catIndex}
-                variant="outline"
-                className="bg-[#98FB98] text-black"
-              >
-                {category}
-              </Badge>
-            ))}
-          </div>
+          {contestant.projectLink && (
+            <a
+              href={contestant.projectLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#98FB98] hover:text-[#98FB98]/80 transition-colors"
+              aria-label={`Visit ${contestant.productName}'s project`}
+            >
+              {getLinkIcon(contestant.projectLink)}
+            </a>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-2 mt-2">
+          {contestant.category.map((category, catIndex) => (
+            <Badge
+              key={catIndex}
+              variant="outline"
+              className="bg-[#98FB98] text-black"
+            >
+              {category}
+            </Badge>
+          ))}
         </div>
       </CardHeader>
       <CardContent>
         <GoogleDriveImage
           fileId={contestant.logo}
-          alt={`${contestant.teamName} logo`}
+          alt={`${contestant.productName} logo`}
           onError={(err: unknown) =>
             console.error("Image failed to load:", err)
           }
@@ -168,13 +189,24 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
             </DialogTrigger>
             <DialogContent className="bg-black text-white border border-[#98FB98] max-h-[90vh] overflow-y-auto w-full md:max-w-[32rem] max-w-[90vw]">
               <DialogHeader>
-                <DialogTitle className="text-[#98FB98]">
-                  {contestant.productName}
+                <DialogTitle className="text-[#98FB98] flex items-center justify-between">
+                  <span>{contestant.productName}</span>
+                  {contestant.projectLink && (
+                    <a
+                      href={contestant.projectLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#98FB98] hover:text-[#98FB98]/80 transition-colors"
+                      aria-label={`Visit ${contestant.productName}'s project`}
+                    >
+                      {getLinkIcon(contestant.projectLink)}
+                    </a>
+                  )}
                 </DialogTitle>
               </DialogHeader>
               <img
                 src={`https://drive.google.com/thumbnail?export=view&id=${contestant.logo}`}
-                alt={`${contestant.teamName} logo`}
+                alt={`${contestant.productName} logo`}
                 className="w-full h-52 object-fill mb-4 rounded-xl"
               />
               <div className="mt-4 w-full break-words overflow-hidden">
