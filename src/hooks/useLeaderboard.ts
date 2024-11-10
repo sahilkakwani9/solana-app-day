@@ -9,15 +9,12 @@ interface LeaderboardData {
 }
 
 const fetchLeaderboard = async (): Promise<LeaderboardData> => {
-  const response = await fetch(
-    "https://1307-103-250-159-212.ngrok-free.app/leaderboard",
-    {
-      method: "GET",
-      headers: {
-        "ngrok-skip-browser-warning": "true",
-      },
-    }
-  );
+  const response = await fetch("http://142.93.203.227/leaderboard", {
+    method: "GET",
+    headers: {
+      "ngrok-skip-browser-warning": "true",
+    },
+  });
   if (!response.ok) {
     throw new Error("Error fetching leaderboard data");
   }

@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { ImageOff } from "lucide-react";
 import { getBestImageUrl } from "@/lib/image";
 
 const GoogleDriveImage = ({
   fileId,
   alt,
-  className = "object-cover rounded-xl",
+  className = "object-fill rounded-xl",
   onError,
   priority = false,
+  height = 36,
 }: {
   fileId: string;
   alt: string;
   className?: string;
   onError: (error: unknown) => void;
   priority?: boolean;
+  height?: number;
 }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [error, setError] = useState(false);
@@ -42,30 +43,32 @@ const GoogleDriveImage = ({
 
   if (error || !imageUrl) {
     return (
-      <div className="relative w-full h-36">
+      <div className={`relative h-${height}`}>
         <Image
           src={`https://placehold.co/600x400/1a1a1a/FFF?text=${alt}`}
           alt={alt}
           fill
           className={`${className} ${
-            loading ? "animate-pulse bg-gray-700" : ""
+            loading ? "animate-pulse bg-gray-700" : "object-cover"
           }`}
           onError={() => setError(true)}
           onLoad={() => setLoading(false)}
           priority={priority}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 33vw"
         />
       </div>
     );
   }
 
   return (
-    <div className="relative w-full h-36">
+    <div className={`relative w-full h-${height}`}>
       <Image
         src={imageUrl}
         alt={alt}
         fill
-        className={`${className} ${loading ? "animate-pulse bg-gray-700" : ""}`}
+        className={`${className} ${
+          loading ? "animate-pulse bg-gray-700" : "object-fill"
+        }`}
         onError={() => setError(true)}
         onLoad={() => setLoading(false)}
         priority={priority}

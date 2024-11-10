@@ -142,7 +142,7 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
         transition: { duration: 0.3 },
       }}
     >
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-2 space-y-2 my-4">
         <div className="flex items-center justify-between">
           <h3 className="text-2xl font-bold font-barlow text-white">
             {contestant.productName}
@@ -159,12 +159,12 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
             </a>
           )}
         </div>
-        <div className="flex flex-wrap gap-2 mt-2">
+        <div className="flex flex-wrap gap-x-2">
           {contestant.category.map((category, catIndex) => (
             <Badge
               key={catIndex}
               variant="outline"
-              className="bg-[#98FB98] text-black"
+              className="bg-[#98FB98] text-black text-xs"
             >
               {category}
             </Badge>
@@ -204,11 +204,16 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
                   )}
                 </DialogTitle>
               </DialogHeader>
-              <img
-                src={`https://drive.google.com/thumbnail?export=view&id=${contestant.logo}`}
-                alt={`${contestant.productName} logo`}
+              <GoogleDriveImage
+                fileId={contestant.logo}
+                alt={`${contestant.productName}`}
+                height={52}
+                onError={(err: unknown) =>
+                  console.error("Image failed to load:", err)
+                }
                 className="w-full h-52 object-fill mb-4 rounded-xl"
               />
+
               <div className="mt-4 w-full break-words overflow-hidden">
                 <p className="break-words overflow-ellipsis text-white">
                   {contestant.description}
