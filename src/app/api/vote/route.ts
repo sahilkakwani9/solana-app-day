@@ -1,7 +1,15 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import prisma from "../../../../prisma/client";
+import { db } from "../../../../drizzle/client";
+import {
+  contestant,
+  contestParticipant,
+  contest,
+} from "../../../../drizzle/schema";
 import { CONTEST_ID } from "@/lib/constant";
+import { and, eq, gt, sql } from "drizzle-orm";
+
+export const runtime = "edge";
 
 const voteSchema = z.object({
   contestantId: z.string().min(1, "Contestant ID is required"),
@@ -13,17 +21,19 @@ export async function POST(req: Request) {
     const { contestantId } = voteSchema.parse(body);
 
     // Check if contest exists and is active
-    const contest = await prisma.contest.findUnique({
-      where: {
-        id: CONTEST_ID,
-        isActive: true,
-        endDate: {
-          gt: new Date(),
-        },
-      },
-    });
+    const [activeContest] = await db
+      .select()
+      .from(contest)
+      .where(
+        and(
+          eq(contest.id, CONTEST_ID),
+          eq(contest.isActive, true),
+          gt(contest.endDate, new Date().toISOString())
+        )
+      )
+      .limit(1);
 
-    if (!contest) {
+    if (!activeContest) {
       return NextResponse.json(
         {
           success: false,
@@ -34,16 +44,18 @@ export async function POST(req: Request) {
     }
 
     // Check if contestant exists and is part of the contest
-    const contestParticipant = await prisma.contestParticipant.findUnique({
-      where: {
-        contestId_contestantId: {
-          contestId: CONTEST_ID,
-          contestantId,
-        },
-      },
-    });
+    const [participation] = await db
+      .select()
+      .from(contestParticipant)
+      .where(
+        and(
+          eq(contestParticipant.contestId, CONTEST_ID),
+          eq(contestParticipant.contestantId, contestantId)
+        )
+      )
+      .limit(1);
 
-    if (!contestParticipant) {
+    if (!participation) {
       return NextResponse.json(
         {
           success: false,
@@ -53,31 +65,37 @@ export async function POST(req: Request) {
       );
     }
 
-    const updatedContestant = await prisma.$transaction(async (tx) => {
-      // Get current contestant for optimistic locking
-      const currentContestant = await tx.contestant.findUnique({
-        where: { id: contestantId },
-      });
+    // Get current contestant
+    const [currentContestant] = await db
+      .select()
+      .from(contestant)
+      .where(eq(contestant.id, contestantId))
+      .limit(1);
 
-      if (!currentContestant) {
-        throw new Error("Contestant not found");
-      }
+    if (!currentContestant) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Contestant not found",
+        },
+        { status: 404 }
+      );
+    }
 
-      // Increment votes
-      return tx.contestant.update({
-        where: { id: contestantId },
-        data: {
-          votes: { increment: 1 },
-        },
-        select: {
-          id: true,
-          name: true,
-          votes: true,
-          teamName: true,
-          productName: true,
-        },
+    // Increment votes
+    const [updatedContestant] = await db
+      .update(contestant)
+      .set({
+        votes: sql`${contestant.votes} + 1`,
+        updatedAt: new Date().toISOString(),
+      })
+      .where(eq(contestant.id, contestantId))
+      .returning({
+        id: contestant.id,
+        name: contestant.name,
+        votes: contestant.votes,
+        productName: contestant.productName,
       });
-    });
 
     return NextResponse.json(
       {
@@ -104,6 +122,8 @@ export async function POST(req: Request) {
       {
         success: false,
         error: "Internal server error",
+        message:
+          error instanceof Error ? error.message : "Unknown error occurred",
       },
       { status: 500 }
     );

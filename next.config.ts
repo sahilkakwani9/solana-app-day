@@ -8,7 +8,12 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ["drive.google.com", "drive.usercontent.google.com"],
+    domains: [
+      "drive.google.com",
+      "drive.usercontent.google.com",
+      "placehold.co",
+    ],
+    dangerouslyAllowSVG: true,
   },
 };
 

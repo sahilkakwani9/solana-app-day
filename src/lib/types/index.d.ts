@@ -1,14 +1,13 @@
 interface Contestant {
   id: string;
   name: string;
-  teamName: string;
   productName: string;
   description: string;
   category: string[];
   votes: number;
   logo: string;
   headshot: string;
-  eclipseAddress: string;
+  projectLink: string;
   onChainId: number;
   createdAt: string;
   updatedAt: string;
@@ -56,5 +55,4 @@ declare interface EthereumPrice {
   ethereum: {
     usd: number;
   };
- }
- 
+}

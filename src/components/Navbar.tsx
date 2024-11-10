@@ -102,7 +102,7 @@ function Navbar() {
             alt="Eclipse Logo"
           />
         </Link>
-        <h1 className="text-4xl font-barlowItalic font-bold absolute left-1/2 transform -translate-x-1/2 hidden lg:block">
+        <h1 className="text-4xl text-white font-barlowItalic font-bold absolute left-1/2 transform -translate-x-1/2 hidden lg:block">
           SOLANA APP DAY
         </h1>
         <div className="hidden md:block">
