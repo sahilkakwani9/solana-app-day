@@ -5,17 +5,17 @@ import { getBestImageUrl } from "@/lib/image";
 const GoogleDriveImage = ({
   fileId,
   alt,
-  className = "object-fill rounded-xl",
+  className = "rounded-xl",
   onError,
   priority = false,
-  height = 36,
+  size = "sm",
 }: {
   fileId: string;
   alt: string;
   className?: string;
   onError: (error: unknown) => void;
   priority?: boolean;
-  height?: number;
+  size?: "sm" | "lg";
 }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [error, setError] = useState(false);
@@ -43,7 +43,7 @@ const GoogleDriveImage = ({
 
   if (error || !imageUrl) {
     return (
-      <div className={`relative h-${height}`}>
+      <div className={`relative w-full ${size === "sm" ? "h-40" : "h-52"}`}>
         <Image
           src={`https://placehold.co/600x400/1a1a1a/FFF?text=${alt}`}
           alt={alt}
@@ -54,14 +54,13 @@ const GoogleDriveImage = ({
           onError={() => setError(true)}
           onLoad={() => setLoading(false)}
           priority={priority}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 33vw"
         />
       </div>
     );
   }
 
   return (
-    <div className={`relative w-full h-${height}`}>
+    <div className={`relative w-full ${size === "sm" ? "h-40" : "h-52"}`}>
       <Image
         src={imageUrl}
         alt={alt}

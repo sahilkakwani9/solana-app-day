@@ -178,6 +178,7 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
           onError={(err: unknown) =>
             console.error("Image failed to load:", err)
           }
+          size="sm"
         />
         <p className="text-sm min-h-16 w-full break-words mt-4 text-white">
           {truncateDescription(contestant.description, 100)}
@@ -191,27 +192,16 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
               <DialogHeader>
                 <DialogTitle className="text-[#98FB98] flex items-center justify-between">
                   <span>{contestant.productName}</span>
-                  {contestant.projectLink && (
-                    <a
-                      href={contestant.projectLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#98FB98] hover:text-[#98FB98]/80 transition-colors"
-                      aria-label={`Visit ${contestant.productName}'s project`}
-                    >
-                      {getLinkIcon(contestant.projectLink)}
-                    </a>
-                  )}
                 </DialogTitle>
               </DialogHeader>
               <GoogleDriveImage
                 fileId={contestant.logo}
                 alt={`${contestant.productName}`}
-                height={52}
+                size="lg"
                 onError={(err: unknown) =>
                   console.error("Image failed to load:", err)
                 }
-                className="w-full h-52 object-fill mb-4 rounded-xl"
+                className="w-full h-52 mb-4 rounded-xl"
               />
 
               <div className="mt-4 w-full break-words overflow-hidden">
