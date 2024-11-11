@@ -126,7 +126,7 @@ export default function LeaderboardPage() {
                     {team.rank ? team.rank : "-"}
                   </TableCell>
                   <TableCell className="text-center text-sm sm:text-lg font-barlow px-2 sm:px-4">
-                    {team.contestantData.teamName}
+                    {team.contestantData.productName}
                   </TableCell>
                   <TableCell className="text-center text-sm sm:text-lg font-barlow px-2 sm:px-4">
                     <div className="flex flex-wrap justify-center gap-1 sm:gap-2">
