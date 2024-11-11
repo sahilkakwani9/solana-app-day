@@ -954,10 +954,10 @@
   resolved "https://registry.yarnpkg.com/@fleek-platform/functions-esbuild-config/-/functions-esbuild-config-0.0.19.tgz#fba27b41c3d23f79778c61db0756dffa5f36cb44"
   integrity sha512-831oGOU48wSm0PNgu+fB/KbkN6uFcetKgwHfYN7VpVP4RBPD+Dc8iD6jiy/9UGfImGdBNHOSqRB94yRhobvC9A==
 
-"@fleek-platform/next-on-fleek@1.15.4":
-  version "1.15.4"
-  resolved "https://registry.yarnpkg.com/@fleek-platform/next-on-fleek/-/next-on-fleek-1.15.4.tgz#0b880905f9770ecd629b0372392e7f3a0862f9aa"
-  integrity sha512-1z8QAR7YJynXXMQ3EKkY/RK2keL/opWmF2de/J/H/6Nw3EuDyqrqrGnWUXWsLq3bjymeZA4W68lBUKKOZi4C8w==
+"@fleek-platform/next-on-fleek@1.15.5":
+  version "1.15.5"
+  resolved "https://registry.yarnpkg.com/@fleek-platform/next-on-fleek/-/next-on-fleek-1.15.5.tgz#6c1c85b31c376955b4821a7e9b26ee4b289f3ebd"
+  integrity sha512-0JAIv7+c89lubDnjtzLYvRIUG630draBx582RlLAxuN5EnDC2wrHgZ28wexgXubOr/HlZbOs6TVF4QaCsrT9OA==
   dependencies:
     acorn "^8.8.0"
     ast-types "^0.14.2"
@@ -975,13 +975,13 @@
     parallel-transform-web "^1.0.1"
     semver "^7.5.2"
 
-"@fleek-platform/next@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@fleek-platform/next/-/next-2.2.0.tgz#207d4b87d09b3cfb9057d6aace1d9b60b3b33d9f"
-  integrity sha512-1WK/npWIKBaitAh1Nb0HSQmvRItMym2sQcLkHpShFYOO0uPV3dCm71HWa0rtpIVcs1LL2i6PtF9XpWZPOdUtSA==
+"@fleek-platform/next@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@fleek-platform/next/-/next-2.2.1.tgz#ca3f4f989e0e60e43ede3511b9cc3f90245bb238"
+  integrity sha512-/m9ZKavEOIb2sBfV5UCZurKi9orORD1qK86E+pgO0i1J5ez7+4URon/wq3e/0gqhrExx2IihYPjz7ajQc+pDZQ==
   dependencies:
     "@fleek-platform/functions-esbuild-config" "0.0.19"
-    "@fleek-platform/next-on-fleek" "1.15.4"
+    "@fleek-platform/next-on-fleek" "1.15.5"
     ansi-escapes "^7.0.0"
     boxen "^7.1.1"
     chalk "^5.3.0"
