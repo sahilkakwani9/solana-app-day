@@ -9,7 +9,7 @@ interface LeaderboardData {
 }
 
 const fetchLeaderboard = async (): Promise<LeaderboardData> => {
-  const response = await fetch("http://142.93.203.227/leaderboard", {
+  const response = await fetch("https://api.devvivek.tech/leaderboard", {
     method: "GET",
   });
   if (!response.ok) {
