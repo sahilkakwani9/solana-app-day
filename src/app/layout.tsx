@@ -43,6 +43,21 @@ export const metadata: Metadata = {
     default: "Solana App Day",
     template: "Eclipse Poll",
   },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://solana-app-day.vercel.app/",
+    title: "Solana App Day voting dashboard",
+    siteName: "Solana App Day Poll",
+    images: [
+      {
+        url: "/hero.png",
+        width: 1200,
+        height: 630,
+        alt: "Eclipse Poll Preview",
+      },
+    ],
+  },
   keywords: [
     "eclipse",
     "eclipse polling",
