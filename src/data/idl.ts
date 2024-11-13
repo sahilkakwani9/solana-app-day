@@ -79,6 +79,10 @@ export type JOKERACEIDL = {
           type: "string";
         },
         {
+          name: "startTime";
+          type: "i64";
+        },
+        {
           name: "endTime";
           type: "i64";
         }
@@ -312,10 +316,14 @@ export type JOKERACEIDL = {
     {
       code: 6002;
       name: "Unauthorized";
+    },
+    {
+      code: 6003;
+      name: "VotingNotStarted";
     }
   ];
   metadata: {
-    address: "AjCadrNzohgyFNaDsFWgziJnhpAVq4bbQkrwFu6JfLdR";
+    address: "7AM2gAnqJ4B3NGJbSrfVW6LBGYzoph3XEhEFtWZ2n5Z";
   };
 };
 export const IDL: JOKERACEIDL = {
@@ -397,6 +405,10 @@ export const IDL: JOKERACEIDL = {
         {
           name: "metadataUri",
           type: "string",
+        },
+        {
+          name: "startTime",
+          type: "i64",
         },
         {
           name: "endTime",
@@ -633,8 +645,12 @@ export const IDL: JOKERACEIDL = {
       code: 6002,
       name: "Unauthorized",
     },
+    {
+      code: 6003,
+      name: "VotingNotStarted",
+    },
   ],
   metadata: {
-    address: "AjCadrNzohgyFNaDsFWgziJnhpAVq4bbQkrwFu6JfLdR",
+    address: "7AM2gAnqJ4B3NGJbSrfVW6LBGYzoph3XEhEFtWZ2n5Z",
   },
 };
