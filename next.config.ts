@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
       "drive.google.com",
       "drive.usercontent.google.com",
       "placehold.co",
+      "ik.imagekit.io",
     ],
     dangerouslyAllowSVG: true,
   },

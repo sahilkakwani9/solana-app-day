@@ -21,12 +21,12 @@ export async function getBestImageUrl(fileId: string): Promise<string> {
   const thumbnailUrl = getGoogleDriveThumbnailUrl(fileId);
 
   if (await checkImageAccessibility(directUrl)) {
-    return directUrl;
+    return `https://ik.imagekit.io/9bxprqiqr3/tr:q-100/${directUrl}`;
   }
 
   if (await checkImageAccessibility(thumbnailUrl)) {
-    return thumbnailUrl;
+    return `https://ik.imagekit.io/9bxprqiqr3/tr:q-100/${thumbnailUrl}`;
   }
 
-  return directUrl;
+  return `https://ik.imagekit.io/9bxprqiqr3/tr:q-100/${directUrl}`;
 }
