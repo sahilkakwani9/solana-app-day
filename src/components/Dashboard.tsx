@@ -1,50 +1,230 @@
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { UnlockIcon, WalletIcon, SendIcon, ExternalLink } from "lucide-react"
-import useVaultBalance from '@/hooks/useVaultBalance'
-import { useWallet } from '@/hooks/useWalletProvider'
-import { useAnchor } from '@/hooks/useAnchor'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  UnlockIcon,
+  WalletIcon,
+  SendIcon,
+  ExternalLink,
+  PlusCircleIcon,
+} from "lucide-react";
+import useVaultBalance from "@/hooks/useVaultBalance";
+import { useWallet } from "@/hooks/useWalletProvider";
+import { useAnchor } from "@/hooks/useAnchor";
 import { useConnection } from "@solana/wallet-adapter-react";
-import { LAMPORTS_PER_SOL, PublicKey, SystemProgram } from '@solana/web3.js'
-import { BN } from '@project-serum/anchor'
-import { useToast } from '@/hooks/use-toast'
-import { queryClient } from './providers'
+import { LAMPORTS_PER_SOL, PublicKey, SystemProgram } from "@solana/web3.js";
+import { BN } from "@project-serum/anchor";
+import { useToast } from "@/hooks/use-toast";
+import { queryClient } from "./providers";
 
 export default function Dashboard({ onLogout }: { onLogout: () => void }) {
   const { publicKey, sendTransaction, connect } = useWallet();
   const { program } = useAnchor();
   const { connection } = useConnection();
-  const { vaultBalance, isLoading } = useVaultBalance()
+  const { vaultBalance, isLoading } = useVaultBalance();
   const { toast } = useToast();
-  const [pubKey, setPubKey] = useState('')
-  const [amount, setAmount] = useState('')
+  const [pubKey, setPubKey] = useState("");
+  const [amount, setAmount] = useState("");
 
-  const handleDistribute = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!program) return;
+  function getVaultAddress() {
+    console.log("PD", program);
 
-    function getVaultAddress() {
-      if (!program || !publicKey) return new PublicKey("");
-      const pdaAddress = PublicKey.findProgramAddressSync(
-        [Buffer.from("vault")],
+    if (!program) return new PublicKey("");
+    const pdaAddress = PublicKey.findProgramAddressSync(
+      [Buffer.from("vault")],
+      program.programId
+    )[0];
+    return pdaAddress;
+  }
+
+  function getProposalCounterAddress() {
+    if (!program) return new PublicKey("");
+    const pdaAddress = PublicKey.findProgramAddressSync(
+      [Buffer.from("contest_counter")],
+      program.programId
+    )[0];
+    return pdaAddress;
+  }
+
+  const handleInitVault = async () => {
+    if (!program || !publicKey) return;
+    try {
+      const va = getVaultAddress();
+
+      const txn = await program.methods
+        .initialize()
+        .accounts({
+          vault: va,
+          owner: publicKey,
+          systemProgram: SystemProgram.programId,
+        })
+        .transaction();
+
+      txn.feePayer = publicKey;
+      txn.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+      const hash = await sendTransaction(txn);
+
+      if (hash && hash.signature) {
+        toast({
+          title: "Vault Initialized",
+          action: (
+            <Button
+              variant="link"
+              className="text-[#98FB98] hover:text-[#98FB98]/80 h-auto p-0"
+              onClick={() =>
+                window.open(
+                  `https://eclipsescan.xyz/tx/${hash.signature}?cluster=devnet`,
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
+            >
+              <span className="flex items-center gap-1">
+                View transaction
+                <ExternalLink className="h-4 w-4" />
+              </span>
+            </Button>
+          ),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error initializing vault",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleInitCounter = async () => {
+    if (!program || !publicKey) return;
+    try {
+      // Add your counter initialization logic here
+      const txn = await program.methods
+        .initContestCounter()
+        .accounts({
+          owner: publicKey,
+          contestCounter: getProposalCounterAddress(),
+          systemProgram: SystemProgram.programId,
+        })
+        .transaction();
+      txn.feePayer = publicKey;
+      txn.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+      const hash = await sendTransaction(txn);
+
+      if (hash && hash.signature) {
+        toast({
+          title: "Contest Counter Initialized",
+          action: (
+            <Button
+              variant="link"
+              className="text-[#98FB98] hover:text-[#98FB98]/80 h-auto p-0"
+              onClick={() =>
+                window.open(
+                  `https://eclipsescan.xyz/tx/${hash.signature}?cluster=devnet`,
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
+            >
+              <span className="flex items-center gap-1">
+                View transaction
+                <ExternalLink className="h-4 w-4" />
+              </span>
+            </Button>
+          ),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error initializing counter",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleInitContest = async () => {
+    if (!program || !publicKey) return;
+    try {
+      const proposalPDA = PublicKey.findProgramAddressSync(
+        [
+          Buffer.from("contest"),
+          publicKey.toBuffer(),
+          new BN(0).toArrayLike(Buffer, "le", 8),
+        ],
         program.programId
       )[0];
-      return pdaAddress;
+      const currentTime = new Date();
+      const startTime = new BN(
+        Math.floor(currentTime.getTime() / 1000) + 30 * 60
+      );
+      const endDate = new Date("2024-11-14T18:00:00Z");
+      const endTime = new BN(Math.floor(endDate.getTime() / 1000));
+
+      const txn = await program.methods
+        .createContest("https://sine", startTime, endTime)
+        .accounts({
+          contest: proposalPDA,
+          author: publicKey,
+          systemProgram: SystemProgram.programId,
+          contestCounter: getProposalCounterAddress(),
+        })
+        .transaction();
+      txn.feePayer = publicKey;
+      txn.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+      const hash = await sendTransaction(txn);
+
+      if (hash && hash.signature) {
+        toast({
+          title: "Contest Initialized",
+          action: (
+            <Button
+              variant="link"
+              className="text-[#98FB98] hover:text-[#98FB98]/80 h-auto p-0"
+              onClick={() =>
+                window.open(
+                  `https://eclipsescan.xyz/tx/${hash.signature}?cluster=devnet`,
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
+            >
+              <span className="flex items-center gap-1">
+                View transaction
+                <ExternalLink className="h-4 w-4" />
+              </span>
+            </Button>
+          ),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error initializing contest",
+        variant: "destructive",
+      });
     }
+  };
+
+  const handleDistribute = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!program) return;
+
     try {
+      if (!publicKey) return;
       const vaultPubkey = getVaultAddress();
       const txn = await program.methods
         .distribute(new BN(parseFloat(amount) * LAMPORTS_PER_SOL))
         .accounts({
           vault: vaultPubkey,
-          authority: publicKey,
+          authority: publicKey!,
           recipient: pubKey,
           systemProgram: SystemProgram.programId,
         })
         .transaction();
-      txn.feePayer = publicKey;
+      txn.feePayer = publicKey!;
       txn.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
       const hash = await sendTransaction(txn);
       if (hash && hash.signature) {
@@ -74,9 +254,9 @@ export default function Dashboard({ onLogout }: { onLogout: () => void }) {
         queryKey: ["VaultBalance"],
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-black p-4">
@@ -101,6 +281,37 @@ export default function Dashboard({ onLogout }: { onLogout: () => void }) {
           </CardHeader>
           <CardContent>
             <p className="text-4xl font-bold">{vaultBalance ?? 0} ETH</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-[#4ADE80] bg-black text-[#4ADE80]">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <PlusCircleIcon className="w-5 h-5" />
+              Initialize Components
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-3 gap-4">
+              <Button
+                onClick={handleInitVault}
+                className="bg-[#4ADE80] text-black hover:bg-[#4ADE80]/90 w-full"
+              >
+                Init Vault
+              </Button>
+              <Button
+                onClick={handleInitCounter}
+                className="bg-[#4ADE80] text-black hover:bg-[#4ADE80]/90 w-full"
+              >
+                Init Counter
+              </Button>
+              <Button
+                onClick={handleInitContest}
+                className="bg-[#4ADE80] text-black hover:bg-[#4ADE80]/90 w-full"
+              >
+                Init Contest
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
@@ -142,5 +353,5 @@ export default function Dashboard({ onLogout }: { onLogout: () => void }) {
         </Card>
       </div>
     </div>
-  )
+  );
 }

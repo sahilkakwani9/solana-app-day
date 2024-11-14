@@ -21,12 +21,7 @@ export type JOKERACEIDL = {
           isSigner: false;
         }
       ];
-      args: [
-        {
-          name: "authority";
-          type: "publicKey";
-        }
-      ];
+      args: [];
     },
     {
       name: "initContestCounter";
@@ -323,7 +318,7 @@ export type JOKERACEIDL = {
     }
   ];
   metadata: {
-    address: "7AM2gAnqJ4B3NGJbSrfVW6LBGYzoph3XEhEFtWZ2n5Z";
+    address: "AqtkKn3JasJ4PjkeeMHgQGfSnTsokPnGo84WdpzobFYF";
   };
 };
 export const IDL: JOKERACEIDL = {
@@ -349,12 +344,7 @@ export const IDL: JOKERACEIDL = {
           isSigner: false,
         },
       ],
-      args: [
-        {
-          name: "authority",
-          type: "publicKey",
-        },
-      ],
+      args: [],
     },
     {
       name: "initContestCounter",
@@ -651,6 +641,6 @@ export const IDL: JOKERACEIDL = {
     },
   ],
   metadata: {
-    address: "7AM2gAnqJ4B3NGJbSrfVW6LBGYzoph3XEhEFtWZ2n5Z",
+    address: "AqtkKn3JasJ4PjkeeMHgQGfSnTsokPnGo84WdpzobFYF",
   },
 };
