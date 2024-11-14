@@ -43,7 +43,7 @@ const GoogleDriveImage = ({
 
   if (error || !imageUrl) {
     return (
-      <div className={`relative w-full ${size === "sm" ? "h-40" : "h-52"}`}>
+      <div className={`relative w-full ${size === "sm" ? "h-72" : "h-52"}`}>
         <Image
           src={`https://placehold.co/600x400/1a1a1a/FFF?text=${alt}`}
           alt={alt}
@@ -60,7 +60,7 @@ const GoogleDriveImage = ({
   }
 
   return (
-    <div className={`relative w-full ${size === "sm" ? "h-40" : "h-52"}`}>
+    <div className={`relative w-full ${size === "sm" ? "h-72" : "h-52"}`}>
       <Image
         src={imageUrl}
         alt={alt}

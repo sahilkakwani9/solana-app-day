@@ -77,7 +77,7 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
         program.programId
       )[0];
 
-      const dollarsInEth = 0.2 / (ethPrice?.ethereum.usd || 2500);
+      const dollarsInEth = 0.1 / (ethPrice?.ethereum.usd || 3200);
 
       const voteTransaction = await program.methods
         .vote(new BN(dollarsInEth * LAMPORTS_PER_SOL), contestantId)
