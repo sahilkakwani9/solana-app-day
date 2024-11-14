@@ -156,15 +156,20 @@ export default function Dashboard({ onLogout }: { onLogout: () => void }) {
         ],
         program.programId
       )[0];
-      const currentTime = new Date();
-      const startTime = new BN(
-        Math.floor(currentTime.getTime() / 1000) + 30 * 60
-      );
-      const endDate = new Date("2024-11-14T18:00:00Z");
+      // Setting base date to Nov 15, 2024 at 10:00 AM Bangkok time (GMT+7)
+      const startDate = new Date("2024-11-15T03:00:00Z"); // 10:00 AM Bangkok time in UTC
+      const startTime = new BN(Math.floor(startDate.getTime() / 1000));
+
+      // Setting end date to Nov 15, 2024 at 4:00 PM Bangkok time (GMT+7)
+      const endDate = new Date("2024-11-15T09:00:00Z"); // 4:00 PM Bangkok time in UTC
       const endTime = new BN(Math.floor(endDate.getTime() / 1000));
 
       const txn = await program.methods
-        .createContest("https://sine", startTime, endTime)
+        .createContest(
+          "https://nks4x6tif7cok23wbxmidken5gxnirzz4fp7qv2jalidcicstz4a.arweave.net/aqXL-mgvxOVrdg3YgaiN6a7URznhX_hXSQLQMSBSnng",
+          startTime,
+          endTime
+        )
         .accounts({
           contest: proposalPDA,
           author: publicKey,
