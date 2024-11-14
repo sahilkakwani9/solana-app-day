@@ -44,6 +44,14 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
     }
   };
 
+  function ensureHttps(url: string): string {
+    if (!url) return "";
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return url;
+    }
+    return `https://${url}`;
+  }
+
   function getVaultAddress() {
     if (!program) return new PublicKey("");
     const pdaAddress = PublicKey.findProgramAddressSync(
@@ -133,6 +141,11 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
       setIsLoading(false);
     }
   };
+
+  if (contestant.projectLink) {
+    console.log("project", contestant.projectLink);
+  }
+
   return (
     <MotionCard
       key={contestant.id}
@@ -149,7 +162,7 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
           </h3>
           {contestant.projectLink && (
             <a
-              href={contestant.projectLink}
+              href={ensureHttps(contestant.projectLink)}
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#98FB98] hover:text-[#98FB98]/80 transition-colors"
