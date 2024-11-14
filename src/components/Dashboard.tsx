@@ -28,7 +28,7 @@ export default function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [amount, setAmount] = useState("");
 
   function getVaultAddress() {
-    console.log("PD", program);
+    console.log("PD", program?.programId.toString());
 
     if (!program) return new PublicKey("");
     const pdaAddress = PublicKey.findProgramAddressSync(

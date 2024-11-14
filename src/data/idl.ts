@@ -317,9 +317,6 @@ export type JOKERACEIDL = {
       name: "VotingNotStarted";
     }
   ];
-  metadata: {
-    address: "AqtkKn3JasJ4PjkeeMHgQGfSnTsokPnGo84WdpzobFYF";
-  };
 };
 export const IDL: JOKERACEIDL = {
   version: "0.1.0",
@@ -640,7 +637,4 @@ export const IDL: JOKERACEIDL = {
       name: "VotingNotStarted",
     },
   ],
-  metadata: {
-    address: "AqtkKn3JasJ4PjkeeMHgQGfSnTsokPnGo84WdpzobFYF",
-  },
 };

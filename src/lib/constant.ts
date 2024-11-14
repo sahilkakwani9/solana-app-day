@@ -1,6 +1,6 @@
-export const EclipseRPC = "https://staging-rpc.dev2.eclipsenetwork.xyz";
+export const EclipseRPC = "https://mainnetbeta-rpc.eclipse.xyz";
 
-export const PROGRAM_ID = "AqtkKn3JasJ4PjkeeMHgQGfSnTsokPnGo84WdpzobFYF";
+export const PROGRAM_ID = "CGfVb6h6wHnAxLfMw3EnssxBEPQgdyNSQzXtWVYkx7Vn";
 
 export const CONTEST_ADDRESS = "G3yfMnvkSkYs5FVkZpiqSUn8S2jQvw1QDaRoHpxBMZQo";
 
