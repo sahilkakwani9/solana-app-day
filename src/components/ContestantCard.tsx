@@ -114,7 +114,7 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
               className="text-[#98FB98] hover:text-[#98FB98]/80 h-auto p-0"
               onClick={() =>
                 window.open(
-                  `https://eclipsescan.xyz/tx/${hash.signature}?cluster=devnet`,
+                  `https://eclipsescan.xyz/tx/${hash.signature}`,
                   "_blank",
                   "noopener,noreferrer"
                 )
@@ -141,10 +141,6 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
       setIsLoading(false);
     }
   };
-
-  if (contestant.projectLink) {
-    console.log("project", contestant.projectLink);
-  }
 
   return (
     <MotionCard

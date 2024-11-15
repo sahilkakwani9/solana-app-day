@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +17,7 @@ import { LAMPORTS_PER_SOL, PublicKey, SystemProgram } from "@solana/web3.js";
 import { BN } from "@project-serum/anchor";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "./providers";
+import { CONTEST_ADDRESS } from "@/lib/constant";
 
 export default function Dashboard({ onLogout }: { onLogout: () => void }) {
   const { publicKey, sendTransaction, connect } = useWallet();
@@ -26,6 +27,10 @@ export default function Dashboard({ onLogout }: { onLogout: () => void }) {
   const { toast } = useToast();
   const [pubKey, setPubKey] = useState("");
   const [amount, setAmount] = useState("");
+
+  useEffect(() => {
+    console.log("ca", CONTEST_ADDRESS);
+  }, []);
 
   function getVaultAddress() {
     console.log("PD", program?.programId.toString());
@@ -74,7 +79,7 @@ export default function Dashboard({ onLogout }: { onLogout: () => void }) {
               className="text-[#98FB98] hover:text-[#98FB98]/80 h-auto p-0"
               onClick={() =>
                 window.open(
-                  `https://eclipsescan.xyz/tx/${hash.signature}?cluster=devnet`,
+                  `https://eclipsescan.xyz/tx/${hash.signature}`,
                   "_blank",
                   "noopener,noreferrer"
                 )
@@ -122,7 +127,7 @@ export default function Dashboard({ onLogout }: { onLogout: () => void }) {
               className="text-[#98FB98] hover:text-[#98FB98]/80 h-auto p-0"
               onClick={() =>
                 window.open(
-                  `https://eclipsescan.xyz/tx/${hash.signature}?cluster=devnet`,
+                  `https://eclipsescan.xyz/tx/${hash.signature}`,
                   "_blank",
                   "noopener,noreferrer"
                 )
@@ -190,7 +195,7 @@ export default function Dashboard({ onLogout }: { onLogout: () => void }) {
               className="text-[#98FB98] hover:text-[#98FB98]/80 h-auto p-0"
               onClick={() =>
                 window.open(
-                  `https://eclipsescan.xyz/tx/${hash.signature}?cluster=devnet`,
+                  `https://eclipsescan.xyz/tx/${hash.signature}`,
                   "_blank",
                   "noopener,noreferrer"
                 )
@@ -241,7 +246,7 @@ export default function Dashboard({ onLogout }: { onLogout: () => void }) {
               className="text-[#98FB98] hover:text-[#98FB98]/80 h-auto p-0"
               onClick={() =>
                 window.open(
-                  `https://eclipsescan.xyz/tx/${hash.signature}?cluster=devnet`,
+                  `https://eclipsescan.xyz/tx/${hash.signature}`,
                   "_blank",
                   "noopener,noreferrer"
                 )
