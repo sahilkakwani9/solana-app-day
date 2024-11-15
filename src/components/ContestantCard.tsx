@@ -64,6 +64,26 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
   const handleVote = async () => {
     setIsLoading(true);
     try {
+      // Show "Voting Closed" toast and return early
+      toast({
+        title: "Voting Period Has Ended",
+        description:
+          "Thank you for your interest! The voting period for this contest has concluded. Stay tuned for the results!",
+        variant: "destructive",
+        action: (
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-[#98FB98] text-[#98FB98] hover:bg-[#98FB98] hover:text-black"
+          >
+            Got it
+          </Button>
+        ),
+      });
+      return;
+
+      // Previous voting logic commented out since voting is closed
+      /*
       if (!publicKey) {
         await connect();
         return;
@@ -72,9 +92,9 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
       const contestAccount = await program.account.contest.fetch(
         CONTEST_ADDRESS
       );
-
+  
       const contestantId = new BN(contestant.onChainId);
-
+  
       const voterRecordPDA = PublicKey.findProgramAddressSync(
         [
           Buffer.from("vote_account"),
@@ -84,9 +104,9 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
         ],
         program.programId
       )[0];
-
+  
       const dollarsInEth = 0.1 / (ethPrice?.ethereum.usd || 3200);
-
+  
       const voteTransaction = await program.methods
         .vote(new BN(dollarsInEth * LAMPORTS_PER_SOL), contestantId)
         .accounts({
@@ -97,14 +117,14 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
           systemProgram: SystemProgram.programId,
         })
         .transaction();
-
+  
       voteTransaction.feePayer = publicKey;
       voteTransaction.recentBlockhash = (
         await connection.getLatestBlockhash()
       ).blockhash;
-
+  
       const hash = await sendTransaction(voteTransaction);
-
+  
       if (hash && hash.signature) {
         toast({
           title: "Vote transaction sent",
@@ -131,11 +151,13 @@ function ContestantCard({ contestant }: { contestant: Contestant }) {
       await queryClient.invalidateQueries({
         queryKey: ["AllVotes"],
       });
+      */
     } catch (error) {
       console.log("error voting on contestant", error);
       toast({
-        title: "Transaction Failed",
+        title: "Error",
         description: (error as Error).message,
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);

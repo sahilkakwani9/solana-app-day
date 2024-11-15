@@ -48,6 +48,17 @@ export default function Component() {
 
   return (
     <div className="min-h-screen bg-black text-white p-8 max-w-7xl mx-auto">
+      <div className="w-full mb-8">
+        <div className="bg-black border-red-500 border-[0.8px] shadow-lg shadow-[#98FB98]/10 backdrop-blur-sm rounded-lg p-3 w-full">
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="font-barlow text-lg font-semibold tracking-wide">
+              Voting Closed
+            </span>
+            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          </div>
+        </div>
+      </div>
       <SearchBar
         isSearchFocused={isSearchFocused}
         searchTerm={searchTerm}
