@@ -73,7 +73,7 @@ export default function AppWalletProvider({
                 className="border-[#98FB98] text-[#98FB98] hover:bg-[#98FB98] hover:text-black"
                 onClick={() =>
                   window.open(
-                    "https://www.backpack.app/",
+                    "https://download.backpack.app/BQcg/SVMDevcon",
                     "_blank",
                     "noopener,noreferrer"
                   )
